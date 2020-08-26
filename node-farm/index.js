@@ -1,7 +1,11 @@
 const fs = require("fs")
+const http = require("http")
+const url = require("url")
 
-// code blocking, synchronous way
+/////////////////////////////////////////////////////////
+// FILEREADER
 
+// **** code blocking, synchronous way
 /*
 const textIn = fs.readFileSync("./txt/input.txt", "utf-8")
 console.log(textIn)
@@ -11,7 +15,8 @@ fs.writeFileSync("./txt/output.txt", textOut)
 console.log("file written!")
 */
 
-//async way CALLBACK HELLL!!!!!!! 😩
+// **** async way CALLBACK HELLL!!!!!!! 😩
+/*
 fs.readFile("./txt/start.txt", "utf-8", (err, data1) => {
 	fs.readFile(`./txt/${data1}.txt`, "utf-8", (err, data2) => {
 		console.log(data2)
@@ -24,3 +29,28 @@ fs.readFile("./txt/start.txt", "utf-8", (err, data1) => {
 	})
 })
 console.log("Reading file...")
+*/
+
+////////////////////////////////
+// SERVER
+
+const server = http.createServer((req, res) => {
+	const pathName = req.url
+
+	if (pathName === "/" || pathName === "/overview") {
+		res.end("This is the overview")
+	} else if (pathName === "/product") {
+		res.end("This is the product")
+	} else {
+		//write headers before response
+		res.writeHead(404, {
+			"Content-type": "text/html",
+			"my-header": "my-own-header",
+		})
+		res.end("<h1>Page not found!</h1>")
+	}
+})
+
+server.listen(8000, () => {
+	console.log("Listening to requests on port 8000")
+})
