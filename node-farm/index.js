@@ -34,6 +34,7 @@ console.log("Reading file...")
 ////////////////////////////////
 // SERVER
 
+//replace template, based on the product that you have
 const replaceTemplate = (temp, product) => {
 	let output = temp.replace(/{%PRODUCTNAME%}/g, product.productName)
 	output = output.replace(/{%IMAGE%}/g, product.image)
@@ -69,28 +70,36 @@ const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, "utf-8")
 const dataObj = JSON.parse(data)
 
 const server = http.createServer((req, res) => {
-	const pathName = req.url
+	const { query, pathname } = url.parse(req.url, true)
 
 	//overview
-	if (pathName === "/" || pathName === "/overview") {
+	if (pathname === "/" || pathname === "/overview") {
 		res.writeHead(200, {
 			"Content-Type": "text/html",
 		})
 
+		//loop through cards and replace all templatecards {%something%} with
+		//the data in the data and ten join
 		const cardsHtml = dataObj
 			.map((el) => replaceTemplate(tempCard, el))
 			.join("")
+		//then replace the product_cards with all the objects that you have from the cardshtml
 		const output = tempOverview.replace("{%PRODUCT_CARDS%}", cardsHtml)
 		res.end(output)
 	}
 
 	//product page
-	else if (pathName === "/product") {
-		res.end("This is the product")
+	else if (pathname === "/product") {
+		//return element based on query string
+		const product = dataObj[query.id]
+		//replace all variables with the properties
+		const output = replaceTemplate(tempProduct, product)
+		//send output with replaced templates
+		res.end(output)
 	}
 
 	//API
-	else if (pathName === "/api") {
+	else if (pathname === "/api") {
 		res.writeHead(200, {
 			"Content-Type": "application/json",
 		})
