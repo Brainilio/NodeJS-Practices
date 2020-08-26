@@ -5,7 +5,6 @@ const replaceTemplate = require("./modules/replaceTemplate")
 
 ////////////////////////////////
 // SERVER
-
 //templates
 const tempOverview = fs.readFileSync(
 	`${__dirname}/templates/template-overview.html`,
