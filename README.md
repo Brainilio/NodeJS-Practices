@@ -13,4 +13,5 @@ This folder will contain my practices with NodeJS
 
 - event loops
 - events (playing around with event emitter and seeing event emitter in action with other modules)
-- streams
+- streams (backpressure, using pipe())
+- how modules work
