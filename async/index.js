@@ -29,10 +29,17 @@ const getDogPic = async () => {
           const data = await readFilePro(`${__dirname}/dog.txt`);
           console.log(`Breed: ${data}`)
 
-          const res = await axios.get(`https://dog.ceo/api/breed/${data}/images/random`)
-          console.log(res.data.message);
+          const res1Pro = axios.get(`https://dog.ceo/api/breed/${data}/images/random`)
 
-          await writeFilePro('dog-img.txt', res.data.message)
+          const res2Pro = axios.get(`https://dog.ceo/api/breed/${data}/images/random`)
+
+          const res3Pro = axios.get(`https://dog.ceo/api/breed/${data}/images/random`)
+
+          const all = await Promise.all([res1Pro, res2Pro, res3Pro])
+          const imgs = all.map(el => el.data.message)
+          console.log(imgs);
+
+          await writeFilePro('dog-img.txt', imgs.join('\n'))
           console.log('Random dog saved to file!')
 
      } catch (err) {
@@ -57,26 +64,26 @@ const getDogPic = async () => {
      }
 })();
 
-console.log("Retrieving..")
-getDogPic().then(x => {
-     console.log(x)
-     console.log("Done getting dog pics!")
-}).catch(err => {
-     console.log(`error! ${err}`)
-})
+// console.log("Retrieving..")
+// getDogPic().then(x => {
+//      console.log(x)
+//      console.log("Done getting dog pics!")
+// }).catch(err => {
+//      console.log(`error! ${err}`)
+// })
 
-//using axios
-readFilePro(`${__dirname}/dog.txt`)
-     .then(data => {
-          console.log(`Breed: ${data}`)
-          return axios.get(`https://dog.ceo/api/breed/${data}/images/random`)
-     })
-     .then(res => {
-          console.log(res.data.message);
-          return writeFilePro('dog-img.txt', res.data.message);
-     })
-     .then(() => {
-          console.log('Random dog saved to file!')
-     }).catch(err => {
-          console.log(err.reason)
-     })
+// //using axios
+// readFilePro(`${__dirname}/dog.txt`)
+//      .then(data => {
+//           console.log(`Breed: ${data}`)
+//           return axios.get(`https://dog.ceo/api/breed/${data}/images/random`)
+//      })
+//      .then(res => {
+//           console.log(res.data.message);
+//           return writeFilePro('dog-img.txt', res.data.message);
+//      })
+//      .then(() => {
+//           console.log('Random dog saved to file!')
+//      }).catch(err => {
+//           console.log(err.reason)
+//      })

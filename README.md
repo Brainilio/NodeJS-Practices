@@ -20,3 +20,4 @@ This folder will contain my practices with NodeJS. Some practices are not new to
 
 - Returning promises in functions to chain them
 - Async/Await in NodeJS
+- Promise.all
